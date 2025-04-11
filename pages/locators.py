@@ -7,7 +7,7 @@ class BasePageLocators():
     USER_ICON = (By.CSS_SELECTOR, ".icon-user")
 
 class MainPageLocators():
-    pass
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link") # Возвращаем локатор в MainPageLocators
 
 class LoginPageLocators():
     LOGIN_FORM = (By.CSS_SELECTOR, "#login_form")

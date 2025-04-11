@@ -17,3 +17,9 @@ def browser(request):
     yield browser
     print("\nquit browser..")
     browser.quit()
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "need_review: mark test to review"
+    )

@@ -8,6 +8,7 @@ import time
 import math
 from selenium.common.exceptions import NoAlertPresentException
 
+@pytest.mark.need_review
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
@@ -44,6 +45,7 @@ def test_guest_can_add_product_to_basket(browser, link):
 
 
 # Для запуска с конкретной ссылкой (как в задании):
+@pytest.mark.need_review
 def test_guest_can_add_the_shellcoders_handbook_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
     page = ProductPage(browser, link)
@@ -56,7 +58,7 @@ def test_guest_can_add_the_shellcoders_handbook_to_basket(browser):
 
 
 # https://stepik.org/lesson/201964/step/5?unit=176022
-
+@pytest.mark.need_review
 def test_guest_should_not_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
@@ -64,7 +66,7 @@ def test_guest_should_not_see_success_message(browser):
     page.should_not_be_success_message()
 
 
-
+@pytest.mark.need_review
 def test_guest_can_add_product_to_basket_and_message_disappears(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
@@ -73,35 +75,33 @@ def test_guest_can_add_product_to_basket_and_message_disappears(browser):
     page.solve_quiz_and_get_code()
     page.should_be_message_about_adding() # Проверяем, что сообщение есть
     time.sleep(3) # Ждем, пока сообщение предположительно исчезнет
-    assert page.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE, timeout=10), \
-        "Success message is not disappeared"
+    page.should_be_success_message_disappeared()
 
 # Новые тесты:
-
+@pytest.mark.need_review
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
     page.open()
     page.add_product_to_basket()
     page.solve_quiz_and_get_code()
-    assert page.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
-        "Success message is presented, but should not be"
+    page.should_not_be_success_message()
 
+@pytest.mark.need_review
 def test_guest_cant_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
     page.open()
-    assert page.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
-        "Success message is presented, but should not be"
+    page.should_not_be_success_message()
 
+@pytest.mark.need_review
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
     page.open()
     page.add_product_to_basket()
     page.solve_quiz_and_get_code()
-    assert page.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE, timeout=10), \
-        "Success message is not disappeared"
+    page.should_be_success_message_disappeared()
 
 @pytest.mark.login
 class TestLoginFromProductPage():
@@ -121,6 +121,7 @@ class TestLoginFromProductPage():
         page.open()
         page.should_not_be_success_message()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
         page = ProductPage(browser, link)
@@ -132,14 +133,21 @@ class TestLoginFromProductPage():
         page.should_be_product_price()
 
     def test_guest_can_go_to_login_page_from_product_page(self):
-        self.page.go_to_login_page()
-        login_page = LoginPage(self.page.browser, self.page.browser.current_url)
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        page = ProductPage(self.browser, link)
+        page.open()
+        page.go_to_login_page()
+        login_page = LoginPage(page.browser, page.browser.current_url)
         login_page.should_be_login_page()
 
     def test_guest_should_see_login_link_on_product_page(self):
-        self.page.should_be_login_link()
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        page = ProductPage(self.browser, link)
+        page.open()
+        page.should_be_login_link()
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
@@ -148,3 +156,25 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_not_be_items_in_basket()
     basket_page.should_be_empty_basket_message()
+
+@pytest.mark.need_review
+class TestUserCanAddProductToBasket():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+        page = LoginPage(browser, link)
+        page.open()
+        email = str(time.time()) + "@fakemail.org"
+        password = str(time.time())
+        page.register_new_user(email, password)
+        page.should_be_authorized_user()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_product_to_basket()
+        page.solve_quiz_and_get_code()
+        page.should_be_message_about_adding()
+        page.should_be_message_basket_total()
+        page.should_be_product_price()
