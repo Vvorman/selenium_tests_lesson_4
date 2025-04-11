@@ -1,18 +1,10 @@
 from selenium.webdriver.common.by import By
 
-# class MainPageLocators():
-#     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
-#
-# class LoginPageLocators():
-#     LOGIN_FORM = (By.CSS_SELECTOR, "#id_login-username")
-#     REGISTER_FORM = (By.CSS_SELECTOR, "#id_login-password")
-
-
-# https://stepik.org/lesson/201964/step/2?unit=176022
-
 class BasePageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    BASKET_LINK = (By.CSS_SELECTOR, ".basket-mini .btn-group > a.btn.btn-default")
+    USER_ICON = (By.CSS_SELECTOR, ".icon-user")
 
 class MainPageLocators():
     pass
@@ -20,6 +12,10 @@ class MainPageLocators():
 class LoginPageLocators():
     LOGIN_FORM = (By.CSS_SELECTOR, "#login_form")
     REGISTER_FORM = (By.CSS_SELECTOR, "#register_form")
+    REGISTER_EMAIL = (By.CSS_SELECTOR, "#id_email")
+    REGISTER_PASSWORD = (By.CSS_SELECTOR, "#id_password1")
+    REGISTER_PASSWORD_CONFIRM = (By.CSS_SELECTOR, "#id_password2")
+    REGISTER_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
 
 class ProductPageLocators():
     ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".btn-add-to-basket")
