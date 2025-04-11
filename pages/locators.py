@@ -15,7 +15,6 @@ class BasePageLocators():
     LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
 
 class MainPageLocators():
-    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link") # Дубликат, будет удален
     pass
 
 class LoginPageLocators():
@@ -28,4 +27,8 @@ class ProductPageLocators():
     PRODUCT_NAME_IN_MESSAGE = (By.CSS_SELECTOR, "#messages .alert:first-child .alertinner strong")
     BASKET_TOTAL_MESSAGE = (By.CSS_SELECTOR, "#messages .alert:last-child .alertinner strong")
     PRODUCT_PRICE = (By.CSS_SELECTOR, ".product_main .price_color")
-    SUCCESS_MESSAGE = (By.CSS_SELECTOR, "#messages div:nth-child(1)")  # Замените на фактический селектор
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, "#messages div:nth-child(1)")
+
+class BasketPageLocators():
+    EMPTY_BASKET_MESSAGE = (By.CSS_SELECTOR, "#content_inner p")
+    BASKET_ITEMS = (By.CSS_SELECTOR, ".basket-items")
