@@ -1,5 +1,8 @@
 from .base_page import BasePage
 from .locators import ProductPageLocators
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 import math
 from selenium.common.exceptions import NoAlertPresentException
@@ -83,3 +86,11 @@ class ProductPage(BasePage):
     def should_disappear_of_success_message(self):
         assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
            "Success message is not disappeared"
+
+
+    def should_be_success_message_disappeared(self, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout).until(
+                EC.invisibility_of_element_located(ProductPageLocators.SUCCESS_MESSAGE))
+        except TimeoutException:
+            assert False, "Success message is still present, but should have disappeared"
